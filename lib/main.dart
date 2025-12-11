@@ -1,5 +1,4 @@
 // ignore_for_file: deprecated_member_use
-// hIER MUSS NOCH WAS GEMACHT WERDEN
 
 import 'package:flutter/material.dart';
 
@@ -54,7 +53,7 @@ class LayoutShell extends StatelessWidget {
 /// Sidebar – Logo, Navigation, Lernprozess, Streak
 /// ----------------------------------------------------------
 class _Sidebar extends StatelessWidget {
-  const _Sidebar({super.key});
+  const _Sidebar();
 
   @override
   Widget build(BuildContext context) {
@@ -168,7 +167,6 @@ class _NavItem extends StatelessWidget {
     required this.icon,
     required this.label,
     this.active = false,
-    super.key,
   });
 
   @override
@@ -209,7 +207,7 @@ class _NavItem extends StatelessWidget {
 /// Main Dashboard – Topbar, Kalender, Explorer, Aufgaben
 /// ----------------------------------------------------------
 class _MainDashboard extends StatelessWidget {
-  const _MainDashboard({super.key});
+  const _MainDashboard();
 
   @override
   Widget build(BuildContext context) {
@@ -247,7 +245,7 @@ class _MainDashboard extends StatelessWidget {
 
 /// Top-Leiste: Suche, Filter, Einstellungen
 class _TopBar extends StatelessWidget {
-  const _TopBar({super.key});
+  const _TopBar();
 
   @override
   Widget build(BuildContext context) {
@@ -292,7 +290,7 @@ class _TopIconButton extends StatelessWidget {
   final IconData icon;
   final String tooltip;
 
-  const _TopIconButton({required this.icon, required this.tooltip, super.key});
+  const _TopIconButton({required this.icon, required this.tooltip});
 
   @override
   Widget build(BuildContext context) {
@@ -319,7 +317,7 @@ class _TopIconButton extends StatelessWidget {
 /// Kalender – oben, größte Card
 /// ----------------------------------------------------------
 class _CalendarCard extends StatelessWidget {
-  const _CalendarCard({super.key});
+  const _CalendarCard();
 
   @override
   Widget build(BuildContext context) {
@@ -470,7 +468,7 @@ class _CalendarCard extends StatelessWidget {
 /// (Explorer = Variante A)
 /// ----------------------------------------------------------
 class _ExplorerRow extends StatelessWidget {
-  const _ExplorerRow({super.key});
+  const _ExplorerRow();
 
   @override
   Widget build(BuildContext context) {
@@ -586,7 +584,7 @@ class _ExplorerRow extends StatelessWidget {
 class _FolderItem extends StatelessWidget {
   final String label;
 
-  const _FolderItem({required this.label, super.key});
+  const _FolderItem({required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -607,7 +605,7 @@ class _FileRow extends StatelessWidget {
   final String name;
   final String tag;
 
-  const _FileRow({required this.name, required this.tag, super.key});
+  const _FileRow({required this.name, required this.tag});
 
   @override
   Widget build(BuildContext context) {
@@ -652,7 +650,7 @@ class _FileRow extends StatelessWidget {
 /// Unten: Wichtigste Aufgaben (links) & allgemeine Aufgabenliste (rechts)
 /// ----------------------------------------------------------
 class _ImportantTodayCard extends StatelessWidget {
-  const _ImportantTodayCard({super.key});
+  const _ImportantTodayCard();
 
   @override
   Widget build(BuildContext context) {
@@ -728,7 +726,7 @@ class _ImportantTodayCard extends StatelessWidget {
 }
 
 class _TasksListCard extends StatelessWidget {
-  const _TasksListCard({super.key});
+  const _TasksListCard();
 
   @override
   Widget build(BuildContext context) {
@@ -786,7 +784,6 @@ class _TaskRow extends StatelessWidget {
     required this.title,
     required this.module,
     this.done = false,
-    super.key,
   });
 
   @override
