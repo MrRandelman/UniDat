@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # unidat_core
 
 A new Flutter project.
@@ -14,3 +15,7 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+=======
+# UniDat
+UniDat MCI Project
+>>>>>>> 8e755c1de78a9f5d6657052e7f74d440b7831aac
