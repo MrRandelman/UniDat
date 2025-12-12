@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dashboard_provider.dart';
+import 'debug_grid_painter.dart';
 
 class DashboardView extends ConsumerWidget {
   const DashboardView({super.key});
+
+  static const double cellSize = 120;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -13,16 +16,20 @@ class DashboardView extends ConsumerWidget {
       builder: (context, constraints) {
         return Stack(
           children: [
-            // Hintergrund (optional Grid später)
-            Container(color: Colors.grey.shade100),
+            // Debug Grid
+            if (showDebugGrid)
+              CustomPaint(
+                size: Size(constraints.maxWidth, constraints.maxHeight),
+                painter: DebugGridPainter(cellSize: cellSize),
+              ),
 
             // Module
             for (final module in dashboard.modules)
               Positioned(
-                left: module.position.x * 120,
-                top: module.position.y * 120,
-                width: module.position.w * 120,
-                height: module.position.h * 120,
+                left: module.position.x * cellSize,
+                top: module.position.y * cellSize,
+                width: module.position.w * cellSize,
+                height: module.position.h * cellSize,
                 child: _ModuleCard(module.id),
               ),
           ],
