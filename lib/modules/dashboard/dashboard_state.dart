@@ -1,0 +1,3 @@
+class DashboardState {
+  const DashboardState();
+}
