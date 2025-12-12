@@ -14,7 +14,7 @@ class DashboardView extends StatelessWidget {
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,
         ),
-        itemCount: 12,
+        itemCount: 30,
         itemBuilder: (context, index) {
           return Container(color: Colors.grey.shade300);
         },
