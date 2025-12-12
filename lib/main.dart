@@ -2,31 +2,24 @@
 // OJBSOIIDB
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
-  runApp(const UniDatApp());
+  runApp(const ProviderScope(child: UniDatApp()));
 }
+
+/// ----------------------------------------------------------
+/// Haupt-App
+/// ----------------------------------------------------------
 
 class UniDatApp extends StatelessWidget {
   const UniDatApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    const seed = Color(0xFF0EA48F);
-
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'UniDat',
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: seed,
-          brightness: Brightness.light,
-        ),
-        scaffoldBackgroundColor: const Color(0xFFF7FAFC),
-        fontFamily: 'Roboto',
-      ),
-      home: const LayoutShell(),
+      home: Scaffold(body: Center(child: Text('UniDat'))),
     );
   }
 }
