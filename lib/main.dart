@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:unidat_core/ui/layout/main_scaffold.dart';
 
 void main() {
   runApp(const ProviderScope(child: UniDatApp()));
@@ -19,7 +20,7 @@ class UniDatApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(body: Center(child: Text('UniDat'))),
+      home: MainScaffold(),
     );
   }
 }
