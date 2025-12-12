@@ -13,6 +13,13 @@ class DashboardNotifier extends StateNotifier<DashboardState> {
         position: const GridPosition(x: 0, y: 0, w: 2, h: 2),
       ),
     );
+    addModule(
+      DashboardModule(
+        id: 'stats-1',
+        type: ModuleType.stats,
+        position: const GridPosition(x: 2, y: 0, w: 2, h: 2),
+      ),
+    );
   }
 
   void addModule(DashboardModule module) {
