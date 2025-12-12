@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:unidat_core/modules/dashboard/dashboard_view.dart';
 import 'sidebar.dart';
 import 'header.dart';
 
@@ -15,7 +16,7 @@ class MainScaffold extends StatelessWidget {
             child: Row(
               children: const [
                 Sidebar(),
-                Expanded(child: Center(child: Text('Dashboard Area'))),
+                Expanded(child: DashboardView()),
               ],
             ),
           ),
