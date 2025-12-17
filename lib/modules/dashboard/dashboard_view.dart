@@ -28,14 +28,12 @@ class DashboardView extends ConsumerWidget {
 
         return Stack(
           children: [
-            // Debug Grid
             if (showDebugGrid)
               CustomPaint(
                 size: Size(constraints.maxWidth, constraints.maxHeight),
                 painter: DebugGridPainter(cellSize: cellSize),
               ),
 
-            // Modules
             for (final module in dashboard.modules)
               Positioned(
                 left: module.position.x * cellSize,
@@ -58,10 +56,11 @@ class _ModuleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      elevation: 6,
-      borderRadius: BorderRadius.circular(8),
-      color: Colors.white,
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+      ),
       child: Center(
         child: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
       ),
@@ -86,11 +85,17 @@ class _DraggableModuleState extends ConsumerState<_DraggableModule> {
   late int startY;
   late int startW;
   late int startH;
+  bool isDragging = false;
+  bool isResizing = false;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onPanStart: (_) {
+        setState(() {
+          isDragging = true;
+        });
+
         dragOffset = Offset.zero;
         startX = widget.module.position.x;
         startY = widget.module.position.y;
@@ -113,6 +118,10 @@ class _DraggableModuleState extends ConsumerState<_DraggableModule> {
             );
       },
       onPanEnd: (_) {
+        setState(() {
+          isDragging = false;
+        });
+
         final pos = widget.module.position;
 
         ref
@@ -123,48 +132,69 @@ class _DraggableModuleState extends ConsumerState<_DraggableModule> {
               ),
             );
       },
-      child: Stack(
-        children: [
-          _ModuleCard(widget.module.id),
+      child: AnimatedScale(
+        scale: (isDragging || isResizing) ? 1.03 : 1.0,
+        duration: const Duration(milliseconds: 120),
+        child: AnimatedPhysicalModel(
+          duration: const Duration(milliseconds: 120),
+          elevation: (isDragging || isResizing) ? 12 : 6,
+          color: Colors.white,
+          shadowColor: Colors.black,
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(8),
+          child: Stack(
+            children: [
+              _ModuleCard(widget.module.id),
 
-          // Resize Handle (bottom-right)
-          Positioned(
-            right: 4,
-            bottom: 4,
-            child: GestureDetector(
-              onPanStart: (_) {
-                resizeOffset = Offset.zero;
-                startW = widget.module.position.w;
-                startH = widget.module.position.h;
-              },
-              onPanUpdate: (details) {
-                resizeOffset += details.delta;
+              // Resize handle
+              Positioned(
+                right: 4,
+                bottom: 4,
+                child: GestureDetector(
+                  onPanStart: (_) {
+                    setState(() {
+                      isResizing = true;
+                    });
 
-                final dw = resizeOffset.dx / widget.cellSize;
-                final dh = resizeOffset.dy / widget.cellSize;
+                    resizeOffset = Offset.zero;
+                    startW = widget.module.position.w;
+                    startH = widget.module.position.h;
+                  },
+                  onPanUpdate: (details) {
+                    resizeOffset += details.delta;
 
-                ref
-                    .read(dashboardProvider.notifier)
-                    .resizeModuleIfFree(
-                      widget.module.copyWith(
-                        position: widget.module.position.copyWith(
-                          w: startW + dw.round(),
-                          h: startH + dh.round(),
-                        ),
-                      ),
-                    );
-              },
-              child: Container(
-                width: 16,
-                height: 16,
-                decoration: BoxDecoration(
-                  color: Colors.black54,
-                  borderRadius: BorderRadius.circular(4),
+                    final dw = resizeOffset.dx / widget.cellSize;
+                    final dh = resizeOffset.dy / widget.cellSize;
+
+                    ref
+                        .read(dashboardProvider.notifier)
+                        .resizeModuleIfFree(
+                          widget.module.copyWith(
+                            position: widget.module.position.copyWith(
+                              w: startW + dw.round(),
+                              h: startH + dh.round(),
+                            ),
+                          ),
+                        );
+                  },
+                  onPanEnd: (_) {
+                    setState(() {
+                      isResizing = false;
+                    });
+                  },
+                  child: Container(
+                    width: 16,
+                    height: 16,
+                    decoration: BoxDecoration(
+                      color: Colors.black54,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
