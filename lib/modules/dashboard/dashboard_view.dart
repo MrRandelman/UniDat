@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dashboard_provider.dart';
 import 'debug_grid_painter.dart';
 import 'models/dashboard_module.dart';
+import 'collision.dart';
 
 const bool showDebugGrid = true;
 
@@ -14,6 +15,13 @@ class DashboardView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final dashboard = ref.watch(dashboardProvider);
+
+    final maxX = (constraints.maxWidth / cellSize).floor();
+    final maxY = (constraints.maxHeight / cellSize).floor();
+
+    ref
+        .read(dashboardProvider.notifier)
+        .updateGridBounds(maxX: maxX, maxY: maxY);
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -91,7 +99,7 @@ class _DraggableModuleState extends ConsumerState<_DraggableModule> {
 
         ref
             .read(dashboardProvider.notifier)
-            .updateModule(
+            .moveModuleIfFree(
               widget.module.copyWith(
                 position: widget.module.position.copyWith(
                   x: startX + dx.floor(),
@@ -105,7 +113,7 @@ class _DraggableModuleState extends ConsumerState<_DraggableModule> {
 
         ref
             .read(dashboardProvider.notifier)
-            .updateModule(
+            .moveModuleIfFree(
               widget.module.copyWith(
                 position: pos.copyWith(x: pos.x.round(), y: pos.y.round()),
               ),
