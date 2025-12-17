@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dashboard_provider.dart';
 import 'debug_grid_painter.dart';
 import 'models/dashboard_module.dart';
-import 'collision.dart';
 
 const bool showDebugGrid = true;
 
@@ -16,15 +15,17 @@ class DashboardView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final dashboard = ref.watch(dashboardProvider);
 
-    final maxX = (constraints.maxWidth / cellSize).floor();
-    final maxY = (constraints.maxHeight / cellSize).floor();
-
-    ref
-        .read(dashboardProvider.notifier)
-        .updateGridBounds(maxX: maxX, maxY: maxY);
-
     return LayoutBuilder(
       builder: (context, constraints) {
+        final maxX = (constraints.maxWidth / cellSize).floor();
+        final maxY = (constraints.maxHeight / cellSize).floor();
+
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          ref
+              .read(dashboardProvider.notifier)
+              .updateGridBounds(maxX: maxX, maxY: maxY);
+        });
+
         return Stack(
           children: [
             // Debug Grid
@@ -79,7 +80,7 @@ class _DraggableModule extends ConsumerStatefulWidget {
 }
 
 class _DraggableModuleState extends ConsumerState<_DraggableModule> {
-  late Offset startDragOffset;
+  late Offset dragOffset;
   late int startX;
   late int startY;
 
@@ -87,15 +88,15 @@ class _DraggableModuleState extends ConsumerState<_DraggableModule> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onPanStart: (_) {
-        startDragOffset = Offset.zero;
+        dragOffset = Offset.zero;
         startX = widget.module.position.x;
         startY = widget.module.position.y;
       },
       onPanUpdate: (details) {
-        startDragOffset += details.delta;
+        dragOffset += details.delta;
 
-        final dx = startDragOffset.dx / widget.cellSize;
-        final dy = startDragOffset.dy / widget.cellSize;
+        final dx = dragOffset.dx / widget.cellSize;
+        final dy = dragOffset.dy / widget.cellSize;
 
         ref
             .read(dashboardProvider.notifier)
