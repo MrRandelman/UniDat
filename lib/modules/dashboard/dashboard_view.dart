@@ -81,8 +81,11 @@ class _DraggableModule extends ConsumerStatefulWidget {
 
 class _DraggableModuleState extends ConsumerState<_DraggableModule> {
   late Offset dragOffset;
+  late Offset resizeOffset;
   late int startX;
   late int startY;
+  late int startW;
+  late int startH;
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +123,49 @@ class _DraggableModuleState extends ConsumerState<_DraggableModule> {
               ),
             );
       },
-      child: _ModuleCard(widget.module.id),
+      child: Stack(
+        children: [
+          _ModuleCard(widget.module.id),
+
+          // Resize Handle (bottom-right)
+          Positioned(
+            right: 4,
+            bottom: 4,
+            child: GestureDetector(
+              onPanStart: (_) {
+                resizeOffset = Offset.zero;
+                startW = widget.module.position.w;
+                startH = widget.module.position.h;
+              },
+              onPanUpdate: (details) {
+                resizeOffset += details.delta;
+
+                final dw = resizeOffset.dx / widget.cellSize;
+                final dh = resizeOffset.dy / widget.cellSize;
+
+                ref
+                    .read(dashboardProvider.notifier)
+                    .resizeModuleIfFree(
+                      widget.module.copyWith(
+                        position: widget.module.position.copyWith(
+                          w: startW + dw.round(),
+                          h: startH + dh.round(),
+                        ),
+                      ),
+                    );
+              },
+              child: Container(
+                width: 16,
+                height: 16,
+                decoration: BoxDecoration(
+                  color: Colors.black54,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

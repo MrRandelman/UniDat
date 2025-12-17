@@ -78,6 +78,30 @@ class DashboardNotifier extends StateNotifier<DashboardState> {
 
     updateModule(updated.copyWith(position: clampedPosition));
   }
+
+  void resizeModuleIfFree(DashboardModule updated) {
+    // Grenzen erzwingen
+    final clampedW = updated.position.w.clamp(
+      1,
+      state.maxGridX - updated.position.x,
+    );
+    final clampedH = updated.position.h.clamp(
+      1,
+      state.maxGridY - updated.position.y,
+    );
+
+    final clampedPosition = updated.position.copyWith(w: clampedW, h: clampedH);
+
+    final collision = collidesWithAny(
+      candidate: clampedPosition,
+      self: updated,
+      others: state.modules,
+    );
+
+    if (collision) return;
+
+    updateModule(updated.copyWith(position: clampedPosition));
+  }
 }
 
 final dashboardProvider =
